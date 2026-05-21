@@ -33,18 +33,39 @@ class UploadForm(FlaskForm):
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-encoder = VGGEncoder('vgg_normalised.pth').to(device)
-decoder = Decoder().to(device)
-decoder.load_state_dict(torch.load('C:\\Users\\hp\\Downloads\\ai-nst-project-main\\ai-nst-project-main\\NST_Code\\experiment\\final_exp\\decoder_final.pth'))
+encoder = None
+decoder = None
 
-encoder.eval()
-decoder.eval()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def load_models():
+    global encoder, decoder
+
+    if encoder is None or decoder is None:
+
+        encoder = VGGEncoder(
+            os.path.join(BASE_DIR, 'vgg_normalised.pth')
+        ).to(device)
+
+        decoder = Decoder().to(device)
+
+        decoder.load_state_dict(torch.load(
+            os.path.join(BASE_DIR, 'experiment/final_exp/decoder_final.pth'),
+            map_location=device
+        ))
+
+        encoder.eval()
+        decoder.eval()
+
+    return encoder, decoder
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-def style_transfer(content_image, style_image, encoder, decoder, alpha, device):
+def style_transfer(content_image, style_image, alpha, device):
+    encoder, decoder = load_models()
+
     content_transform = transforms.Compose([
         transforms.Resize(512),
         transforms.ToTensor()
@@ -54,6 +75,7 @@ def style_transfer(content_image, style_image, encoder, decoder, alpha, device):
         transforms.Resize(512),
         transforms.ToTensor()
     ])
+
     content_image = content_transform(content_image).unsqueeze(0).to(device)
     style_image = style_transform(style_image).unsqueeze(0).to(device)
 
@@ -142,9 +164,9 @@ def send_example(filename):
     return send_from_directory('examples', filename)
 
 
-if __name__ == '__main__':
-    from werkzeug.serving import run_simple
-    run_simple('localhost', 5000, app, use_reloader=True, use_debugger=True)
+# if __name__ == '__main__':
+#     from werkzeug.serving import run_simple
+#     run_simple('localhost', 5000, app, use_reloader=True, use_debugger=True)
 
 
 
