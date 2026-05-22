@@ -35,7 +35,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 encoder = VGGEncoder('vgg_normalised.pth').to(device)
 decoder = Decoder().to(device)
-decoder.load_state_dict(torch.load('C:\\Users\\hp\\OneDrive\\Desktop\\ai-nst-project-main\\ai-nst-project-main\NST_Code\\vgg_normalised.pth'))
+decoder.load_state_dict(torch.load('C:\\Users\\hp\\OneDrive\\Desktop\\ai-nst-project-main\\ai-nst-project-main\\NST_Code\\vgg_normalised.pth'))
 
 encoder.eval()
 decoder.eval()
