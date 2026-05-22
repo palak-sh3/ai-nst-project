@@ -1,11 +1,14 @@
+numpy
+tqdm==4.66.4
 Flask==3.1.2
 Flask_Bootstrap==3.3.7.1
 flask_wtf==1.2.2
-numpy
-Pillow
-torch==2.9.0
-torchvision==0.24.0
-tqdm==4.66.4
 Werkzeug==3.1.4
 WTForms==3.2.1
+Pillow
 gunicorn
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.2.2+cpu
+torchvision==0.17.2+cpu
