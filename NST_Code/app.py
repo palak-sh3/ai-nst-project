@@ -35,7 +35,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 encoder = VGGEncoder('vgg_normalised.pth').to(device)
 decoder = Decoder().to(device)
-decoder.load_state_dict(torch.load('/home/ubuntu/Desktop/NST_Code/experiment/final_exp/decoder_final.pth'))
+decoder.load_state_dict(torch.load('C:\\Users\\hp\\OneDrive\\Desktop\\ai-nst-project-main\\ai-nst-project-main\NST_Code\\vgg_normalised.pth'))
 
 encoder.eval()
 decoder.eval()
@@ -46,12 +46,12 @@ def allowed_file(filename):
 
 def style_transfer(content_image, style_image, encoder, decoder, alpha, device):
     content_transform = transforms.Compose([
-        transforms.Resize(512),
+        transforms.Resize(256),
         transforms.ToTensor()
     ])
 
     style_transform = transforms.Compose([
-        transforms.Resize(512),
+        transforms.Resize(256),
         transforms.ToTensor()
     ])
     content_image = content_transform(content_image).unsqueeze(0).to(device)
